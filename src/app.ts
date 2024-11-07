@@ -1,10 +1,10 @@
 // src/app.ts
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-// import helmet from 'helmet';
+import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
-// import { knex } from './config/database';
+import { db } from './config/database';
 import routes from './routes';
 import logger from './utils/logger';
 import { handleResponse, handleError } from './utils/response';
@@ -14,16 +14,16 @@ import { setupSwagger } from './swagger';
 const app = express();
 
 // Security middleware
-// app.use(helmet()); // Adds various HTTP headers for security
-app.use(cors()); // Enable CORS for all routes
+app.use(helmet()); 
+app.use(cors()); 
 
 // Rate limiting
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 100, // limit each IP to 100 requests per windowMs
-//   message: 'Too many requests from this IP, please try again later.'
-// });
-// app.use('/api', limiter);
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.'
+});
+app.use('/api', limiter);
 
 // Request parsing
 app.use(express.json());
@@ -70,31 +70,31 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Graceful shutdown
-// process.on('SIGTERM', gracefulShutdown);
-// process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
 
-// async function gracefulShutdown() {
-//   logger.info('Starting graceful shutdown...');
+async function gracefulShutdown() {
+  logger.info('Starting graceful shutdown...');
   
-//   try {
-//     // Close database connection
-//     await knex.destroy();
-//     logger.info('Database connections closed.');
+  try {
+    // Close database connection
+    await db.destroy();
+    logger.info('Database connections closed.');
     
-//     // Close server
-//     if (server) {
-//       server.close(() => {
-//         logger.info('Server closed.');
-//         process.exit(0);
-//       });
-//     } else {
-//       process.exit(0);
-//     }
-//   } catch (error) {
-//     logger.error('Error during shutdown:', error);
-//     process.exit(1);
-//   }
-// }
+    // Close server
+    if (server) {
+      server.close(() => {
+        logger.info('Server closed.');
+        process.exit(0);
+      });
+    } else {
+      process.exit(0);
+    }
+  } catch (error) {
+    logger.error('Error during shutdown:', error);
+    process.exit(1);
+  }
+}
 
 // Server setup
 const PORT = process.env.PORT || 4000;
@@ -103,14 +103,14 @@ const server = app.listen(PORT, () => {
 });
 
 // Error handling for uncaught exceptions
-// process.on('uncaughtException', (error: Error) => {
-//   logger.error('Uncaught Exception:', error);
-//   gracefulShutdown();
-// });
+process.on('uncaughtException', (error: Error) => {
+  logger.error('Uncaught Exception:', error);
+  gracefulShutdown();
+});
 
-// process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
-//   logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
-//   gracefulShutdown();
-// });
+process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  gracefulShutdown();
+});
 
 export { app, server };

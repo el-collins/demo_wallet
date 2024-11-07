@@ -15,11 +15,11 @@ import {
 export class WalletController {
   createWallet = async (req: any, res: any) => {
     try {
-      const { userId, email } = req.user;
+      const { id, email } = req.user;
 
-      const wallet = await walletService.createWallet(userId, email);
+      const wallet = await walletService.createWallet(id, email);
 
-      success(res, "Wallet created successfully", wallet);
+      handleResponse(res, 201, "Wallet created successfully", wallet);
     } catch (error: any) {
       logger.error("Error creating wallet:", error);
 
@@ -76,7 +76,7 @@ export class WalletController {
 
       const transaction = await walletService.fundWallet(id, amount);
 
-      success(res, "Wallet funded successfully", {
+      handleResponse(res, 200, "Wallet funded successfully", {
         transaction,
       });
     } catch (error: any) {
@@ -90,7 +90,7 @@ export class WalletController {
         badRequest(res, "Wallet is not in active status");
       }
 
-      serverError(res, "Failed to fund wallet");
+      handleError(res, "Failed to fund wallet");
     }
   };
 

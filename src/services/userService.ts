@@ -8,7 +8,7 @@ import { db } from "../config/database";
 import { walletService } from "./walletService";
 import { generateToken } from "../utils/jwt";
 
-class UserService {
+export class UserService {
   async createUser(userData: Partial<User>) {
     try {
       return await db.transaction(async (trx) => {

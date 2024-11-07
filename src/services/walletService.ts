@@ -9,7 +9,7 @@ import {
   TransactionType,
 } from "../models/Transaction";
 
-class WalletService {
+export class WalletService {
   private adjutorService: AdjutorService;
 
   constructor() {
