@@ -1,3 +1,5 @@
+//src/routes/index.ts
+
 import express from 'express';
 import userRoutes from './userRoutes';
 import walletRoutes from './walletRoutes';

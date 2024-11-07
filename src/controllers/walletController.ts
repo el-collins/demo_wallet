@@ -1,3 +1,4 @@
+// src/controllers/walletController.ts
 import { Request, Response } from "express";
 import { walletService } from "../services/walletService";
 import logger from "../utils/logger";
@@ -12,23 +13,23 @@ import {
 } from "../utils/response";
 
 export class WalletController {
-  // createWallet = async (req: any, res: any) => {
-  //   try {
-  //     const { userId, email } = req.user;
+  createWallet = async (req: any, res: any) => {
+    try {
+      const { userId, email } = req.user;
 
-  //     const wallet = await walletService.createWallet(userId, email);
+      const wallet = await walletService.createWallet(userId, email);
 
-  //     success(res, "Wallet created successfully", wallet);
-  //   } catch (error: any) {
-  //     logger.error("Error creating wallet:", error);
+      success(res, "Wallet created successfully", wallet);
+    } catch (error: any) {
+      logger.error("Error creating wallet:", error);
 
-  //     if (error.message === "User is blacklisted from the platform") {
-  //       forbidden(res, error.message);
-  //     }
+      if (error.message === "User is blacklisted from the platform") {
+        forbidden(res, error.message);
+      }
 
-  //     handleError(res, error);
-  //   }
-  // };
+      handleError(res, error);
+    }
+  };
 
   getWallet = async (req: any, res: Response) => {
     try {

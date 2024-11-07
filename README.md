@@ -150,6 +150,7 @@ GET /api/v1/wallets/all [Admin only]
 
    - All financial operations wrapped in database transactions
    - Rollback on any operation failure
+   - Used optimistic locking for concurrent operations
    - Idempotency via transaction references
 
 2. **Security**

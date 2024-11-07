@@ -1,17 +1,15 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/walletRoutes.ts
-import express from "express";
-import { authenticateToken, authorizeAdmin } from "../middlewares/auth";
-import {
-  validateFundWallet,
-  validateTransfer,
-  validateWithdrawal,
-} from "../middlewares/validator/walletValidator";
-import { walletController } from "../controllers/walletController";
-
-const router = express.Router();
-
-router.use(authenticateToken); // All wallet routes require authentication
-
+const express_1 = __importDefault(require("express"));
+const auth_1 = require("../middlewares/auth");
+const walletValidator_1 = require("../middlewares/validator/walletValidator");
+const walletController_1 = require("../controllers/walletController");
+const router = express_1.default.Router();
+router.use(auth_1.authenticateToken); // All wallet routes require authentication
 /**
  * @swagger
  * /wallets/fund:
@@ -38,8 +36,7 @@ router.use(authenticateToken); // All wallet routes require authentication
  *       404:
  *         description: Wallet not found
  */
-router.post("/fund", validateFundWallet, walletController.fundWallet);
-
+router.post("/fund", walletValidator_1.validateFundWallet, walletController_1.walletController.fundWallet);
 /**
  * @swagger
  * /wallets:
@@ -54,8 +51,7 @@ router.post("/fund", validateFundWallet, walletController.fundWallet);
  *       404:
  *         description: Wallet not found
  */
-router.get("/", walletController.getWallet);
-
+router.get("/", walletController_1.walletController.getWallet);
 /**
  * @swagger
  * /wallets/transfer:
@@ -85,8 +81,7 @@ router.get("/", walletController.getWallet);
  *       404:
  *         description: Wallet not found
  */
-router.post("/transfer", validateTransfer, walletController.transfer);
-
+router.post("/transfer", walletValidator_1.validateTransfer, walletController_1.walletController.transfer);
 /**
  * @swagger
  * /wallets/withdraw:
@@ -115,8 +110,7 @@ router.post("/transfer", validateTransfer, walletController.transfer);
  *       500:
  *         description: Failed to process withdrawal
  */
-router.post("/withdraw", validateWithdrawal, walletController.withdraw);
-
+router.post("/withdraw", walletValidator_1.validateWithdrawal, walletController_1.walletController.withdraw);
 /**
  * @swagger
  * /wallets/transactions:
@@ -147,8 +141,7 @@ router.post("/withdraw", validateWithdrawal, walletController.withdraw);
  *       400:
  *         description: Bad request
  */
-router.get("/transactions", walletController.getTransactions);
-
+router.get("/transactions", walletController_1.walletController.getTransactions);
 /**
  * @swagger
  * /wallets/balance:
@@ -163,8 +156,7 @@ router.get("/transactions", walletController.getTransactions);
  *       404:
  *         description: Wallet not found
  */
-router.get("/balance", walletController.getBalance);
-
+router.get("/balance", walletController_1.walletController.getBalance);
 /**
  * @swagger
  * /wallets/all:
@@ -181,7 +173,5 @@ router.get("/balance", walletController.getBalance);
  *       500:
  *         description: Failed to fetch wallets
  */
-router.get("/all", authorizeAdmin, walletController.getAllWallets);
-
-
-export default router;
+router.get("/all", auth_1.authorizeAdmin, walletController_1.walletController.getAllWallets);
+exports.default = router;

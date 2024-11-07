@@ -1,3 +1,4 @@
+// src/services/walletService.ts
 import { db } from "../config/database";
 import { v4 as uuidv4 } from "uuid";
 import { AdjutorService } from "./adjutorService";
@@ -15,7 +16,7 @@ class WalletService {
     this.adjutorService = AdjutorService.getInstance();
   }
 
-  async createWallet(userId: string, email: string, trx: any): Promise<Wallet> {
+  async createWallet(userId: string, email: string, trx?: any): Promise<Wallet> {
     try {
       // Check blacklist
       const isBlacklisted = await this.adjutorService.checkKarmaBlacklist(
