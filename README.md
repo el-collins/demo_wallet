@@ -1,6 +1,7 @@
 # Lendsqr Wallet Service Documentation
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Database Design](#database-design)
 3. [API Documentation](#api-documentation)
@@ -14,14 +15,16 @@
 The Wallet Service is a microservice that enables users to perform financial transactions within the Lendsqr mobile lending application. It provides core functionality for wallet management, including account creation, funding, transfers, and withdrawals.
 
 ### Key Features
-- User account creation with blacklist validation
+
+- User account creation with Adjutor Karma blacklist validation
 - Wallet funding
 - Wallet-to-wallet transfers
-- Withdrawals
+- Wallet Withdrawals
 - Transaction history
-- Integration with Lendsqr Adjutor Karma blacklist
+- Faux token-based authentication
 
 ### Tech Stack
+
 - Node.js (v18 LTS)
 - TypeScript
 - MySQL with KnexJS ORM
@@ -34,163 +37,101 @@ The Wallet Service is a microservice that enables users to perform financial tra
 
 ```mermaid
 erDiagram
-    USERS ||--o{ WALLETS : has
-    USERS ||--o| BLACKLIST_CACHE : has
-    WALLETS ||--o{ TRANSACTIONS : has
-
-    USERS {
+    User ||--o{ Wallet : has
+    User {
         uuid id PK
+        string email
         string firstName
         string lastName
-        string email
-        string phoneNumber
         string password
-        enum status
+        string phoneNumber
+        string role
         datetime createdAt
         datetime updatedAt
     }
-
-    WALLETS {
+    Wallet ||--o{ Transaction : contains
+    Wallet {
         uuid id PK
         uuid userId FK
         decimal balance
-        enum status
+        string status
         string currency
         datetime createdAt
         datetime updatedAt
     }
-
-    TRANSACTIONS {
+    Transaction {
         uuid id PK
         uuid walletId FK
-        enum type
+        string type
         decimal amount
-        string currency
-        enum status
+        string status
         string reference
-        json metadata
         datetime createdAt
-        datetime updatedAt
+         datetime updatedAt
     }
 
-    BLACKLIST_CACHE {
-        uuid userId FK
-        boolean isBlacklisted
-        datetime lastChecked
-        datetime createdAt
-        datetime updatedAt
-    }
+
 ```
 
 ### Database Schema Details
 
 #### Users Table
+
 - Primary store for user information
 - Status tracks account state (active/suspended/blocked)
 - Unique constraints on email and phone number
 
 #### Wallets Table
+
 - One-to-one relationship with users
 - Balance stored as decimal(20,4) for precision
 - Supports multiple currencies (defaulting to NGN)
 - Status tracking for wallet state management
 
 #### Transactions Table
+
 - Comprehensive transaction logging
 - Types: deposit, withdrawal, transfer
 - Reference field ensures idempotency
 - Metadata field stores transaction-specific details
 
-#### Blacklist Cache Table
-- Caches Adjutor API responses
-- Reduces API calls and improves performance
-- Regular cache invalidation based on lastChecked
 
 ## API Documentation
 
+### Authentication
+All endpoints except user creation require authentication via Bearer token.
+
 ### Endpoints
 
+#### API VERSION
+```
+/api/v1/v1
+```
+
+
 #### User Management
-```typescript
-POST /api/v1/users
-Description: Create new user account
-Request:
-{
-  firstName: string,
-  lastName: string,
-  email: string,
-  phoneNumber: string,
-  password: string
-}
-Response: 201 Created
-{
-  id: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  createdAt: string
-}
+
+```
+POST /api/v1/v1/user/register
+POST /api/v1/v1/user/login
+GET /api/v1/v1/user/me
 ```
 
 #### Wallet Operations
-```typescript
-POST /api/v1/wallets
-Description: Create wallet for user
-Authentication: Required
-Response: 201 Created
-{
-  id: string,
-  userId: string,
-  balance: number,
-  currency: string,
-  status: string
-}
-
+```
 POST /api/v1/wallets/fund
-Description: Fund wallet
-Authentication: Required
-Request:
-{
-  amount: number,
-  currency: string
-}
-Response: 200 OK
-{
-  transaction: {
-    id: string,
-    type: "deposit",
-    amount: number,
-    status: string,
-    reference: string
-  },
-  balance: number
-}
-
 POST /api/v1/wallets/transfer
-Description: Transfer funds between wallets
-Authentication: Required
-Request:
-{
-  receiverWalletId: string,
-  amount: number,
-  description?: string
-}
-Response: 200 OK
-{
-  transaction: {
-    id: string,
-    type: "transfer",
-    amount: number,
-    status: string,
-    reference: string
-  },
-  balance: number
-}
+POST /api/v1/wallets/withdraw
+GET /api/v1/wallets
+GET /api/v1/wallets/balance
+GET /api/v1/wallets/transactions
+GET /api/v1/wallets/all [Admin only]
 ```
 
 ## Architecture
 
 ### Service Layer Architecture
+
 ```plaintext
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │   Controllers   │ ──▶ │    Services     │ ──▶ │     Models      │
@@ -204,19 +145,22 @@ Response: 200 OK
 ```
 
 ### Key Design Decisions
+
 1. **Transaction Management**
+
    - All financial operations wrapped in database transactions
    - Rollback on any operation failure
    - Idempotency via transaction references
 
 2. **Security**
+
    - Token-based authentication
    - Request validation middleware
    - Rate limiting for API endpoints
    - Secure password hashing
 
 3. **Performance**
-   - Blacklist caching mechanism
+
    - Database indexing strategy
    - Connection pooling
 
@@ -228,12 +172,14 @@ Response: 200 OK
 ## Setup Instructions
 
 1. **Prerequisites**
+
 ```bash
 node -v  # Should be >= 18.0.0
 npm -v   # Should be >= 8.0.0
 ```
 
 2. **Environment Variables**
+
 ```env
 NODE_ENV=development
 PORT=3000
@@ -241,18 +187,21 @@ DB_HOST=localhost
 DB_USER=your_user
 DB_PASSWORD=your_password
 DB_NAME=wallet_service
+DB_PORT=29292
 JWT_SECRET=your_secret
 ADJUTOR_API_KEY=your_api_key
-ADJUTOR_API_URL=https://api.adjutor.lendsqr.com
+ADJUTOR_API_URL=https://api/v1.adjutor.lendsqr.com
 ```
 
 3. **Database Setup**
+
 ```bash
 npm install
-npm run migrate:latest
+npm run knex migrate:latest
 ```
 
 4. **Running the Service**
+
 ```bash
 # Development
 npm run dev
@@ -278,6 +227,7 @@ npm test -- -t "WalletService"
 ## Deployment
 
 ### Heroku Deployment
+
 1. Create new Heroku app
 2. Set environment variables
 3. Connect GitHub repository
@@ -291,12 +241,9 @@ git push heroku main
 heroku logs --tail
 ```
 
-### Monitoring
-- Integration with Firebase Analytics
-- Error tracking via Firebase Crashlytics
-- Performance monitoring via Firebase Performance Monitoring
 
 ## Future Improvements
+
 1. Implement webhook notifications for transaction status
 2. Add support for multiple currencies and exchange rates
 3. Implement transaction limits and velocity checks

@@ -4,7 +4,7 @@ import walletRoutes from './walletRoutes';
 
 const router = express.Router();
 
-router.use('/users', userRoutes);
-// router.use('/wallets', walletRoutes);
+router.use('/user', userRoutes);
+router.use('/wallets', walletRoutes);
 
 export default router;

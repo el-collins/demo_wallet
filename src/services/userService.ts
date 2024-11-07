@@ -6,6 +6,7 @@ import { User } from "../models/User";
 import logger from "../utils/logger";
 import { db } from "../config/database";
 import { walletService } from "./walletService";
+import { generateToken } from "../utils/jwt";
 
 class UserService {
   async createUser(userData: Partial<User>) {
@@ -13,6 +14,16 @@ class UserService {
       return await db.transaction(async (trx) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(userData.password!, 10);
+
+
+        // Check if email is already in use
+        const existingUser = await trx("users")
+          .where({ email: userData.email })
+          .first();
+
+        if (existingUser) {
+          throw new Error("Email/user is already in use");
+        }
 
         // Create user
         const user: User = {
@@ -22,16 +33,17 @@ class UserService {
           lastName: userData.lastName!,
           password: hashedPassword,
           phoneNumber: userData.phoneNumber!,
+          role: userData.role ? userData.role : "user",
           createdAt: new Date(),
           updatedAt: new Date(),
         };
 
-        const [userId] = await trx("users").insert(user);
+        await trx("users").insert(user);
 
         // Create wallet for user
-        await walletService.createWallet(user.id);
+        await walletService.createWallet(user.id, user.email, trx);
 
-        console.log(user);
+        
 
         return user;
       });
@@ -40,6 +52,29 @@ class UserService {
         throw new Error(`Failed to create user: ${error.message}`);
       } else {
         throw new Error("Failed to create user: Unknown error");
+      }
+    }
+  }
+
+  async login(
+    email: string,
+    password: string
+  ): Promise<{ user: User; token: string }> {
+    try {
+      const user = await this.validateCredentials(email, password);
+
+      const token = generateToken({
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      });
+
+      return { user, token };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to login: ${error.message}`);
+      } else {
+        throw new Error("Failed to login: Unknown error");
       }
     }
   }
@@ -76,6 +111,7 @@ class UserService {
     return updatedUser;
   }
 
+
   async validateCredentials(email: string, password: string): Promise<User> {
     const user = await db("users").where({ email }).first();
 
@@ -84,6 +120,15 @@ class UserService {
     }
 
     return user;
+  }
+
+  // Generate NUBAN number
+  private generateNubanNumber(): string {
+    // Generate a random 10-digit number
+    const nubanNumber = Math.floor(
+      1000000000 + Math.random() * 9000000000
+    ).toString();
+    return nubanNumber;
   }
 }
 

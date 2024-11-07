@@ -1,66 +1,69 @@
-import { Request, Response, NextFunction } from 'express';
-import Joi from 'joi';
-import { ApiResponse } from '../../utils/apiResponse';
+import { Request, Response, NextFunction } from "express";
+import Joi from "joi";
+import { badRequest } from "../../utils/response";
 
 const createWalletSchema = Joi.object({
-  currency: Joi.string().length(3).default('NGN')
+  currency: Joi.string().length(3).default("NGN"),
 });
 
 const fundWalletSchema = Joi.object({
-  amount: Joi.number().positive().required()
+  amount: Joi.number().positive().required(),
 });
 
 const transferSchema = Joi.object({
   recipientId: Joi.string().uuid().required(),
   amount: Joi.number().positive().required(),
-  description: Joi.string().max(100)
+  description: Joi.string().max(100),
 });
 
 const withdrawalSchema = Joi.object({
   amount: Joi.number().positive().required(),
-  bankDetails: Joi.object({
-    bankCode: Joi.string().required(),
-    accountNumber: Joi.string().length(10).required(),
-    accountName: Joi.string().required()
-  }).required()
 });
 
-export const validateCreateWallet = (req: Request, res: Response, next: NextFunction) => {
+export const validateCreateWallet = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { error } = createWalletSchema.validate(req.body);
   if (error) {
-    return ApiResponse.badRequest(res, {
-      message: error.details[0].message
-    });
+    badRequest(res, error.details.map((detail) => detail.message).join(", "));
   }
   next();
 };
 
-export const validateFundWallet = (req: Request, res: Response, next: NextFunction) => {
+export const validateFundWallet = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { error } = fundWalletSchema.validate(req.body);
   if (error) {
-    return ApiResponse.badRequest(res, {
-      message: error.details[0].message
-    });
+    badRequest(res, error.details.map((detail) => detail.message).join(", "));
   }
   next();
 };
 
-export const validateTransfer = (req: Request, res: Response, next: NextFunction) => {
+export const validateTransfer = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { error } = transferSchema.validate(req.body);
   if (error) {
-    return ApiResponse.badRequest(res, {
-      message: error.details[0].message
-    });
+    badRequest(res, error.details.map((detail) => detail.message).join(", "));
   }
   next();
 };
 
-export const validateWithdrawal = (req: Request, res: Response, next: NextFunction) => {
+export const validateWithdrawal = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { error } = withdrawalSchema.validate(req.body);
   if (error) {
-    return ApiResponse.badRequest(res, {
-      message: error.details[0].message
-    });
+    badRequest(res, error.details.map((detail) => detail.message).join(", "));
   }
   next();
 };

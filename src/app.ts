@@ -8,6 +8,7 @@ import rateLimit from 'express-rate-limit';
 import routes from './routes';
 import logger from './utils/logger';
 import { handleResponse, handleError } from './utils/response';
+import { setupSwagger } from './swagger';
 
 // Initialize express app
 const app = express();
@@ -17,12 +18,12 @@ const app = express();
 app.use(cors()); // Enable CORS for all routes
 
 // Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
-});
-app.use('/api', limiter);
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 100, // limit each IP to 100 requests per windowMs
+//   message: 'Too many requests from this IP, please try again later.'
+// });
+// app.use('/api', limiter);
 
 // Request parsing
 app.use(express.json());
@@ -47,8 +48,15 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.redirect("/api-docs");
+});
+
 // API routes
 app.use('/api/v1', routes);
+
+// Setup Swagger
+setupSwagger(app);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

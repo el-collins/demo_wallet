@@ -15,7 +15,6 @@ export interface Transaction {
     walletId: string;
     type: TransactionType;
     amount: number;
-    currency: string;
     status: TransactionStatus;
     reference: string;
     createdAt: Date;

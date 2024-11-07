@@ -30,3 +30,28 @@ export function handleError(res: Response, error: any): Response<ApiResponse> {
 
   return handleResponse(res, statusCode, message, null);
 }
+
+
+export function badRequest(res: Response, message: string, data: any = null): Response<ApiResponse> {
+  return handleResponse(res, 400, message, data);
+}
+
+export function forbidden(res: Response, message: string, data: any = null): Response<ApiResponse> {
+  return handleResponse(res, 403, message, data);
+}
+
+export function success(res: Response, message: string, data: any = null): Response<ApiResponse> {
+  return handleResponse(res, 200, message, data);
+}
+
+export function created(res: Response, message: string, data: any = null): Response<ApiResponse> {
+  return handleResponse(res, 201, message, data);
+}
+
+export function notFound(res: Response, message: string, data: any = null): Response<ApiResponse> {
+  return handleResponse(res, 404, message, data);
+}
+
+export function serverError(res: Response, message: string, data: any = null): Response<ApiResponse> {
+  return handleResponse(res, 500, message, data);
+}

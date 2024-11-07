@@ -1,6 +1,5 @@
-import axios from 'axios';
-import logger from '../utils/logger';
-
+import axios from "axios";
+import logger from "../utils/logger";
 
 export class AdjutorService {
   private static instance: AdjutorService;
@@ -19,18 +18,37 @@ export class AdjutorService {
     return AdjutorService.instance;
   }
 
-  async checkKarmaBlacklist(userId: string): Promise<boolean> {
+  async checkKarmaBlacklist(identity: string): Promise<boolean> {
     try {
+      if (!this.baseUrl || !this.apiKey) {
+        throw new Error("Adjutor API URL and API key must be defined");
+      }
+
+      // 0zspgifzbo.ga
+
       const response = await axios.get(
-        `${this.baseUrl}/karma/blacklist/${userId}`,
+        `${this.baseUrl}/verification/karma/${identity}`,
         {
-          headers: { 'Authorization': `Bearer ${this.apiKey}` }
+          headers: { Authorization: `Bearer ${this.apiKey}` },
         }
       );
-      return response.data.isBlacklisted;
+
+      if (response.data.status === "success") {
+        return true; // User is blacklisted
+      }
+
+      return false;
     } catch (error) {
-      logger.error('Error checking karma blacklist:', error);
-      throw new Error('Failed to check karma blacklist');
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.status === 404 &&
+        error.response?.data?.status === "success"
+      ) {
+        // User is not found in the blacklist
+        return false;
+      }
+      logger.error("Error checking karma blacklist:", error);
+      throw new Error("Failed to check karma blacklist");
     }
   }
 }

@@ -1,15 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-interface AuthenticatedRequest extends Request {
-  user?: string;
-}
-
-export const authenticateToken = (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export const authenticateToken = (req: any, res: any, next: NextFunction) => {
   const token = req.header("Authorization")?.split(" ")[1];
 
   if (!token) {
@@ -18,9 +10,17 @@ export const authenticateToken = (
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-    req.user = decoded as string;
+    req.user = decoded as { id: string; email: string; role: string }; // Include role in the user object
     next();
   } catch (error) {
     return res.status(403).json({ message: "Invalid token" });
   }
+};
+
+
+export const authorizeAdmin = (req: any, res: any, next: NextFunction) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: "Access denied" });
+  }
+  next();
 };
