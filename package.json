@@ -1,11 +1,11 @@
 {
   "name": "demo_wallet",
   "version": "1.0.0",
-  "main": "src/app.ts",
+  "main": "dist/src/app.js",
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "start": "tsc && node dist/app.js",
+    "start": "node dist/src/app.js",
     "dev": "nodemon src/app.ts",
     "knex": "knex",
     "vercel-build": "echo 'vercel-build'",

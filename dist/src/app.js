@@ -60,7 +60,7 @@ app.get('/health', (req, res) => {
     });
 });
 app.get("/", (req, res) => {
-    res.redirect("/api-docs");
+    res.json({ message: "Welcome to the API" });
 });
 // API routes
 app.use('/api/v1', routes_1.default);
