@@ -9,6 +9,13 @@ import routes from './routes';
 import logger from './utils/logger';
 import { handleResponse, handleError } from './utils/response';
 import { setupSwagger } from './swagger';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
+
+
+
 
 // Initialize express app
 const app = express();

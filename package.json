@@ -34,7 +34,6 @@
     "swagger-ui-express": "^5.0.1",
     "tsx": "^4.19.2",
     "uuid": "^11.0.2",
-    "vercel": "^37.14.0",
     "winston": "^3.16.0"
   },
   "devDependencies": {
