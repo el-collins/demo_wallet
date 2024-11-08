@@ -1535,3 +1535,12 @@
 {"level":"info","message":"Server is running on port 5000","timestamp":"2024-11-07T23:53:11.706Z"}
 {"level":"info","message":"Server is running on port 5000","timestamp":"2024-11-07T23:53:40.164Z"}
 {"level":"info","message":"Server is running on port 5000","timestamp":"2024-11-07T23:54:03.288Z"}
+{"level":"info","message":"Starting graceful shutdown...","timestamp":"2024-11-07T23:55:04.766Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2024-11-07T23:59:10.465Z"}
+{"level":"info","message":"::1 - - [08/Nov/2024:00:00:14 +0000] \"GET / HTTP/1.1\" 302 38 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36\"","timestamp":"2024-11-08T00:00:14.098Z"}
+{"level":"info","message":"::1 - - [08/Nov/2024:00:00:14 +0000] \"GET /api-docs HTTP/1.1\" 301 158 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36\"","timestamp":"2024-11-08T00:00:14.116Z"}
+{"level":"info","message":"::1 - - [08/Nov/2024:00:00:14 +0000] \"GET /api-docs/ HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36\"","timestamp":"2024-11-08T00:00:14.146Z"}
+{"level":"info","message":"::1 - - [08/Nov/2024:00:00:14 +0000] \"GET /api-docs/swagger-ui-init.js HTTP/1.1\" 200 11174 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36\"","timestamp":"2024-11-08T00:00:14.531Z"}
+{"level":"info","message":"::1 - - [08/Nov/2024:00:00:14 +0000] \"GET /api-docs/swagger-ui.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36\"","timestamp":"2024-11-08T00:00:14.546Z"}
+{"level":"info","message":"::1 - - [08/Nov/2024:00:00:14 +0000] \"GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36\"","timestamp":"2024-11-08T00:00:14.551Z"}
+{"level":"info","message":"::1 - - [08/Nov/2024:00:00:14 +0000] \"GET /api-docs/swagger-ui-bundle.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36\"","timestamp":"2024-11-08T00:00:14.555Z"}
