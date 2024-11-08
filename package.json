@@ -1,14 +1,15 @@
 {
   "name": "demo_wallet",
   "version": "1.0.0",
-  "main": "dist/src/app.js",
+  "main": "src/app.ts",
   "scripts": {
+    "build": "tsc",
     "test": "jest",
-    "buid": "tsc",
-    "start": "ts-node src/app.ts",
+    "start": "tsc && node dist/app.js",
     "dev": "nodemon src/app.ts",
     "knex": "knex",
-    "vercel-build": "echo hello"
+    "vercel-build": "echo 'vercel-build'",
+    "vercel-start": "echo 'vercel-start'"
   },
   "keywords": [],
   "author": "",

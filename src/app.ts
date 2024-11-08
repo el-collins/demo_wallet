@@ -15,8 +15,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-
-
 // Initialize express app
 const app = express();
 
@@ -55,9 +53,10 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
-app.get("/", (req, res) => {
-  res.redirect("/api-docs");
+app.get("/", (req: Request, res: Response) => {
+  res.json({ message: "Welcome to the API" });
 });
+  
 
 // API routes
 app.use('/api/v1', routes);
@@ -120,4 +119,4 @@ process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
   gracefulShutdown();
 });
 
-module.exports = app;
+export { app };

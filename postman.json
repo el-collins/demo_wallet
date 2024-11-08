@@ -1,0 +1,287 @@
+{
+    "info": {
+      "name": "Wallet Service API",
+      "description": "API collection for the Wallet Service project",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "User Management",
+        "description": "Endpoints for user registration and authentication",
+        "item": [
+          {
+            "name": "Register User",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "url": "{{base_url}}/api/v1/user/register",
+              "body": {
+                "mode": "raw",
+                "raw": {
+                  "email": "user@example.com",
+                  "firstName": "John",
+                  "lastName": "Doe",
+                  "password": "securePassword123",
+                  "phoneNumber": "+2348012345678"
+                }
+              },
+              "description": "Create a new user account with automatic wallet creation"
+            },
+            "response": [
+              {
+                "status": "201 Created",
+                "body": {
+                  "status": true,
+                  "message": "User created successfully",
+                  "data": {
+                    "id": "uuid-string",
+                    "email": "user@example.com",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "role": "user",
+                    "createdAt": "timestamp",
+                    "updatedAt": "timestamp"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Login",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "url": "{{base_url}}/api/v1/user/login",
+              "body": {
+                "mode": "raw",
+                "raw": {
+                  "email": "user@example.com",
+                  "password": "securePassword123"
+                }
+              },
+              "description": "Authenticate user and get access token"
+            },
+            "response": [
+              {
+                "status": "200 OK",
+                "body": {
+                  "status": true,
+                  "message": "Login successful",
+                  "data": {
+                    "user": {
+                      "id": "uuid-string",
+                      "email": "user@example.com",
+                      "firstName": "John",
+                      "lastName": "Doe",
+                      "role": "user"
+                    },
+                    "token": "jwt-token-string"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Get User Profile",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}"
+                }
+              ],
+              "url": "{{base_url}}/api/v1/user/me",
+              "description": "Get current user's profile information"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Wallet Management",
+        "description": "Endpoints for wallet operations",
+        "item": [
+          {
+            "name": "Get Wallet",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}"
+                }
+              ],
+              "url": "{{base_url}}/api/v1/wallets",
+              "description": "Get user's wallet information"
+            },
+            "response": [
+              {
+                "status": "200 OK",
+                "body": {
+                  "status": true,
+                  "message": "Wallet retrieved successfully",
+                  "data": {
+                    "id": "wallet-uuid",
+                    "userId": "user-uuid",
+                    "balance": 1000.00,
+                    "status": "ACTIVE",
+                    "currency": "NGN",
+                    "createdAt": "timestamp",
+                    "updatedAt": "timestamp"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Fund Wallet",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "url": "{{base_url}}/api/v1/wallets/fund",
+              "body": {
+                "mode": "raw",
+                "raw": {
+                  "amount": 1000.00
+                }
+              },
+              "description": "Fund user's wallet"
+            }
+          },
+          {
+            "name": "Transfer Funds",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "url": "{{base_url}}/api/v1/wallets/transfer",
+              "body": {
+                "mode": "raw",
+                "raw": {
+                  "recipientId": "recipient-user-id",
+                  "amount": 500.00
+                }
+              },
+              "description": "Transfer funds to another user's wallet"
+            }
+          },
+          {
+            "name": "Withdraw Funds",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "url": "{{base_url}}/api/v1/wallets/withdraw",
+              "body": {
+                "mode": "raw",
+                "raw": {
+                  "amount": 200.00
+                }
+              },
+              "description": "Withdraw funds from user's wallet"
+            }
+          },
+          {
+            "name": "Get Transactions",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/api/v1/wallets/transactions?page=1&limit=10&type=FUNDING",
+                "query": [
+                  {
+                    "key": "page",
+                    "value": "1"
+                  },
+                  {
+                    "key": "limit",
+                    "value": "10"
+                  },
+                  {
+                    "key": "type",
+                    "value": "FUNDING"
+                  }
+                ]
+              },
+              "description": "Get wallet transactions with pagination and filtering"
+            }
+          },
+          {
+            "name": "Get Balance",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}"
+                }
+              ],
+              "url": "{{base_url}}/api/v1/wallets/balance",
+              "description": "Get current wallet balance"
+            }
+          },
+          {
+            "name": "Get All Wallets (Admin)",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{admin_token}}"
+                }
+              ],
+              "url": "{{base_url}}/api/v1/wallets/all",
+              "description": "Admin endpoint to get all wallets"
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "http://localhost:4000",
+        "type": "string"
+      }
+    ]
+  }

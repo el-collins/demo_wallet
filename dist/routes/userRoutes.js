@@ -1,18 +1,19 @@
-//src/routes/userRoutes.ts
-import express from "express";
-import { authenticateToken } from "../middlewares/auth";
-import { validateCreateUser, validateLogin } from "../middlewares/validator/userValidator";
-import UserController from "../controllers/userController";
-
-const router = express.Router();
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const auth_1 = require("../middlewares/auth");
+const userValidator_1 = require("../middlewares/validator/userValidator");
+const userController_1 = __importDefault(require("../controllers/userController"));
+const router = express_1.default.Router();
 /**
  * @swagger
  * tags:
  *   name: User
  *   description: User management
  */
-
 /**
  * @swagger
  * /user/register:
@@ -42,8 +43,7 @@ const router = express.Router();
  *       400:
  *         description: Bad request
  */
-router.post("/register", validateCreateUser, UserController.createUser);
-
+router.post("/register", userValidator_1.validateCreateUser, userController_1.default.createUser);
 /**
  * @swagger
  * /user/login:
@@ -67,8 +67,7 @@ router.post("/register", validateCreateUser, UserController.createUser);
  *       401:
  *         description: Unauthorized
  */
-router.post("/login", validateLogin, UserController.login);
-
+router.post("/login", userValidator_1.validateLogin, userController_1.default.login);
 /**
  * @swagger
  * /user/me:
@@ -100,9 +99,5 @@ router.post("/login", validateLogin, UserController.login);
  *       500:
  *         description: Internal server error
  */
-router.get("/me", authenticateToken, UserController.getUser);
-
-
-
-
-export default router;
+router.get("/me", auth_1.authenticateToken, userController_1.default.getUser);
+exports.default = router;
