@@ -1,11 +1,11 @@
 {
   "name": "demo_wallet",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "main": "dist/app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "node src/app.ts",
+    "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
     "knex": "knex"
   },

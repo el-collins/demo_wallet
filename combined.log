@@ -1544,3 +1544,4 @@
 {"level":"info","message":"::1 - - [08/Nov/2024:00:00:14 +0000] \"GET /api-docs/swagger-ui.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36\"","timestamp":"2024-11-08T00:00:14.546Z"}
 {"level":"info","message":"::1 - - [08/Nov/2024:00:00:14 +0000] \"GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36\"","timestamp":"2024-11-08T00:00:14.551Z"}
 {"level":"info","message":"::1 - - [08/Nov/2024:00:00:14 +0000] \"GET /api-docs/swagger-ui-bundle.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36\"","timestamp":"2024-11-08T00:00:14.555Z"}
+{"level":"info","message":"Starting graceful shutdown...","timestamp":"2024-11-08T00:01:43.255Z"}
