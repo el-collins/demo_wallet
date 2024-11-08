@@ -1,6 +1,6 @@
 import type { Knex } from "knex";
 import dotenv from 'dotenv';
-import logger from "./src/utils/logger";
+import logger from "./utils/logger";
 
 
 
