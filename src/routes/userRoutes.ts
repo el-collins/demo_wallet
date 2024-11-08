@@ -1,6 +1,6 @@
 import express from "express";
 import { authenticateToken } from "../middlewares/auth";
-import { validateCreateUser } from "../middlewares/validator/userValidator";
+import { validateCreateUser, validateLogin } from "../middlewares/validator/userValidator";
 import UserController from "../controllers/userController";
 
 const router = express.Router();
@@ -66,7 +66,7 @@ router.post("/register", validateCreateUser, UserController.createUser);
  *       401:
  *         description: Unauthorized
  */
-router.post("/login", UserController.login);
+router.post("/login", validateLogin, UserController.login);
 
 /**
  * @swagger

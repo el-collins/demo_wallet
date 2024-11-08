@@ -58,6 +58,17 @@ const createUserSchema = Joi.object({
   }),
 });
 
+const loginSchema = Joi.object({
+  email: Joi.string().email().required().trim().lowercase().messages({
+    "string.email": "Please provide a valid email address",
+    "string.empty": "Email is required",
+  }),
+
+  password: Joi.string().required().messages({
+    "string.empty": "Password is required",
+  }),
+});
+
 export const validateCreateUser = async (
   req: Request,
   res: Response,
@@ -92,3 +103,35 @@ export const validateCreateUser = async (
     return next(error);
   }
 };
+
+export const validateLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const validatedData = await loginSchema.validateAsync(req.body, {
+      abortEarly: false,
+      stripUnknown: true,
+    });
+
+    req.body = validatedData;
+    return next();
+  } catch (error) {
+    if (error instanceof Joi.ValidationError) {
+      const errorDetails = error.details.map((detail) => ({
+        field: detail.path[0],
+        message: detail.message,
+      }));
+
+      const errorMessage =
+        "Validation failed: " +
+        errorDetails.map((err) => `${err.field} - ${err.message}`).join(", ");
+
+      const validationError = new ValidationError(errorMessage);
+      return next(validationError);
+    }
+
+    return next(error);
+  }
+}

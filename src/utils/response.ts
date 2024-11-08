@@ -1,5 +1,5 @@
-import { Response } from 'express';
-import logger from './logger';
+import { Response } from "express";
+import logger from "./logger";
 
 export interface ApiResponse {
   status: boolean;
@@ -21,37 +21,64 @@ export function handleResponse(
 }
 
 export function handleError(res: Response, error: any): Response<ApiResponse> {
-  const statusCode = error.statusCode || 500;
-  const message = error.message || 'Internal server error';
-
-  if (statusCode === 500) {
-    logger.error('Error:', error);
+  if (res.headersSent) {
+    return res;
   }
 
-  return handleResponse(res, statusCode, message, null);
+  const statusCode = error.statusCode || 500;
+  const message = error.message || "Internal server error";
+
+  return res.status(statusCode).json({
+    status: false,
+    message,
+    data: null,
+  });
 }
 
-
-export function badRequest(res: Response, message: string, data: any = null): Response<ApiResponse> {
+export function badRequest(
+  res: Response,
+  message: string,
+  data: any = null
+): Response<ApiResponse> {
   return handleResponse(res, 400, message, data);
 }
 
-export function forbidden(res: Response, message: string, data: any = null): Response<ApiResponse> {
+export function forbidden(
+  res: Response,
+  message: string,
+  data: any = null
+): Response<ApiResponse> {
   return handleResponse(res, 403, message, data);
 }
 
-export function success(res: Response, message: string, data: any = null): Response<ApiResponse> {
+export function success(
+  res: Response,
+  message: string,
+  data: any = null
+): Response<ApiResponse> {
   return handleResponse(res, 200, message, data);
 }
 
-export function created(res: Response, message: string, data: any = null): Response<ApiResponse> {
+export function created(
+  res: Response,
+  message: string,
+  data: any = null
+): Response<ApiResponse> {
   return handleResponse(res, 201, message, data);
 }
 
-export function notFound(res: Response, message: string, data: any = null): Response<ApiResponse> {
+export function notFound(
+  res: Response,
+  message: string,
+  data: any = null
+): Response<ApiResponse> {
   return handleResponse(res, 404, message, data);
 }
 
-export function serverError(res: Response, message: string, data: any = null): Response<ApiResponse> {
+export function serverError(
+  res: Response,
+  message: string,
+  data: any = null
+): Response<ApiResponse> {
   return handleResponse(res, 500, message, data);
 }
