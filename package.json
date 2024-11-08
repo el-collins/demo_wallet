@@ -4,9 +4,11 @@
   "main": "dist/src/app.js",
   "scripts": {
     "test": "jest",
-    "start": "tsc && node dist/src/app.js",
+    "buid": "tsc",
+    "start": "ts-node src/app.ts",
     "dev": "nodemon src/app.ts",
-    "knex": "knex"
+    "knex": "knex",
+    "vercel-build": "echo hello"
   },
   "keywords": [],
   "author": "",

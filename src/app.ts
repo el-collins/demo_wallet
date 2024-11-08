@@ -120,4 +120,4 @@ process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
   gracefulShutdown();
 });
 
-export { app, server };
+module.exports = app;
