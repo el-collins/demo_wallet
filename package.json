@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "start": "node dist/src/app.js",
+    "start": "npm run build && node dist/src/app.js",
     "dev": "nodemon src/app.ts",
     "knex": "knex",
     "vercel-build": "echo 'vercel-build'",
