@@ -52,8 +52,7 @@ const createUserSchema = Joi.object({
       "string.empty": "Phone number is required",
     }),
 
-  role: Joi.string().valid("user", "admin").required().messages({
-    "string.empty": "Role is required",
+  role: Joi.string().valid("user", "admin").messages({
     "any.only": 'Role must be either "user" or "admin"',
   }),
 });
@@ -134,4 +133,4 @@ export const validateLogin = async (
 
     return next(error);
   }
-}
+};
