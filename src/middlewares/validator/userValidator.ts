@@ -52,7 +52,7 @@ const createUserSchema = Joi.object({
       "string.empty": "Phone number is required",
     }),
 
-  role: Joi.string().valid("user", "admin").messages({
+  role: Joi.string().valid("user", "admin").optional().messages({
     "any.only": 'Role must be either "user" or "admin"',
   }),
 });
